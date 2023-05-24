@@ -1,0 +1,87 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<h1>Публикация: {{ publication }}</h1>
+
+
+<h3>Автор:</h3>
+<ul>
+  {% for author in publication.author.all %}
+    <li>{{ author.name }}</li>
+  {% empty %}
+    <li>No authors</li>
+  {% endfor %}
+</ul>
+
+<h2>Журнал:</h2>
+{% if publication.journal %}
+  <p>{{ publication.journal.name }}</p>
+{% else %}
+  <p>No journal</p>
+{% endif %}
+
+<h2>URL:</h2>
+{% if publication.URL %}
+  <p><a href="{{ publication.URL }}">{{ publication.URL }}</a></p>
+{% else %}
+  <p>No URL</p>
+{% endif %}
+
+<table>
+
+    <tr>
+      <h1>Publication: {{ publication.title }}</h1>
+
+  <h2>Authors:</h2>
+  <ul>
+    {% for author in publication.author.all %}
+      <li>{{ author.name }}</li>
+    {% empty %}
+      <li>No authors</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Journal:</h2>
+  {% if publication.journal %}
+    <p>{{ publication.journal.name }}</p>
+  {% else %}
+    <p>No journal</p>
+  {% endif %}
+
+  <h2>URL:</h2>
+  {% if publication.URL %}
+    <p><a href="{{ publication.URL }}">{{ publication.URL }}</a></p>
+  {% else %}
+    <p>No URL</p>
+  {% endif %}
+        
+
+    {% for key, value in publication.get_fields %}
+
+    <tr>
+        <td>{{ key }}</td>
+        {% if key != "PDF" %}
+            <td>{{ value }}</td>
+        {% else %}
+            <td>
+            <a href="{{publication.media}}/media/{{ value }}">Ссылка на файл</a>
+            </td>
+        {% endif %}
+    </tr>
+    {% empty %}
+        <h3>Публикации не найдены</h3>
+    {% endfor %}
+    <tr>
+        <td> Теги </td>
+        <td>
+        <ul>
+        {% for tag in publication.tags.all %}
+            <li> {{ tag.name }} </li>
+        {% endfor %}
+        </ul>
+        </td>
+    <tr>
+</table>
+
+{% endblock content %}

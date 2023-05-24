@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<h3>Редактирование публикации</h3>
+<a href="{% url 'publications' %}">Вернуться назад</a>
+{% if request.user.id == publication.user.id %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input type="submit" value="Отправить">
+    </form>
+{% else %}
+<p>Нет прав на редактирование данной публикации</p>
+{% endif %}
+
+
+{% endblock content %}

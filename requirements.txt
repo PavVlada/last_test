@@ -1,0 +1,9 @@
+django==3.*
+mysqlclient
+pdf2bib
+django-taggit
+djangorestframework
+markdown
+django-filter
+django-ajax-selects
+django-autocomplete-light

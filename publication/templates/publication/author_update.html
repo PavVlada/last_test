@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<h3>Редактирование автора</h3>
+<a href="{% url 'publications' %}">Вернуться назад</a>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Отправить">
+    </form>
+
+{% endblock content %}

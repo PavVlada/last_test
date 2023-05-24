@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<h1> Список моих публикаций </h1>
+<a href="{% url 'publication-create' %}">Добавить публикацию</a>
+
+<table>
+    <tr>
+        <th>Мои публикации</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    {% for publication in publications %}
+    <tr>
+        <td>{{ publication.title }}</td>
+        <td><a href="{% url 'publication' publication.id %}">Подробнее</a></td>
+        <td><a href="{% url 'publication-update' publication.id %}">Редактировать</a></td>
+        <td><a href="{% url 'publication-delete' publication.id %}">Удалить</a></td>
+    </tr>
+    {% empty %}
+        <h3>Публикации не найдены</h3>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}

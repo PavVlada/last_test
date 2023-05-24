@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+
+<h3>Создание публикации</h3>
+<a href="{% url 'publications' %}">Вернуться назад</a>
+
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Отправить">
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_author', '#id_publisher', '#id_editor', '#id_journal').select2({
+            theme: 'bootstrap4',
+            tags: true,
+        });
+        
+    });
+</script>
+
+{% endblock content %}

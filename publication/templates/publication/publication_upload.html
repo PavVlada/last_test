@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<h3>Загрузить файл</h3>
+<a href="{% url 'publications' %}">Вернуться назад</a>
+
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.file_path }}
+    <input type="submit" value="Отправить">
+</form>
+
+
+{% endblock content %}

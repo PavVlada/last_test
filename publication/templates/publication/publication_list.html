@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<h1> Список публикаций</h1>
+
+
+<!-- <form method="GET">
+    <input type="text" name="search-area" value="{{ search_input }}">
+    <input type="submit" value="Поиск">
+</form> -->
+
+<form method="GET">
+    {{ list_filter.form }}
+    <input type="submit" value="Поиск">
+</form>
+
+{% if has_filter %}
+  <a href="{%  url 'publications' %}">Очистить все фильтры</a>
+{% endif %}
+
+<table>
+    <tr>
+        <th>Публикация</th>
+        <th>Теги</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    {% for publication in publications %}
+    <tr>
+        <td>{{ publication.title }}</td>
+        <td>
+            <ul>
+            {% for tag in publication.tags.all %}
+                <li> {{ tag.name }} </li>
+            {% endfor %}
+            </ul>
+            </td>
+
+        {% if request.user.is_authenticated %}
+            {% if request.user.id == publication.user.id %}
+                <td><a href="{% url 'publication' publication.id %}">Подробнее</a></td>
+                <td><a href="{% url 'publication-update' publication.id %}">Редактировать</a></td>
+                <td><a href="{% url 'publication-delete' publication.id %}">Удалить</a></td>
+            {% endif %}
+        {% endif %}
+    </tr>
+    {% empty %}
+        <h3>Публикации не найдены</h3>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}

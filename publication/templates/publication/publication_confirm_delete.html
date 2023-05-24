@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<a href="{% url 'publications' %}">Вернуться назад</a>
+
+{% if request.user.id == publication.user.id %}
+<form method="POST">
+    {% csrf_token %}
+    <p>Вы уверены, что хотите удалить публикацию: "{{ publication.title }}"?</p>
+    <input type="submit" value="Удалить"/>
+</form>
+{% else %}
+<p>Нет прав на удаление данной публикации</p>
+{% endif %}
+
+{% endblock content %}

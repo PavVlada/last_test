@@ -19,7 +19,45 @@ from citeproc.source.json import CiteProcJSON
 # The following JSON data describes 5 references picked from the CSL test suite.
 
 json_input = """
-[
+[   
+    {
+        "id": "BOOK",
+        "type": "book",
+        "title": "Название книги",
+        "author": [
+            {
+                "family": "Колодезников",
+                "given": "Владимир"
+            },
+            {
+                "family": "Колодезников",
+                "given": "Ефим"
+            }
+        ],
+        "editor": [
+            {
+                "family": "Ардеев",
+                "given": "Дамир"
+            },
+            {
+                "family": "Данилова",
+                "given": "Агата"
+            }
+        ],
+        "abstract": "Аннотация: супер интересная книга",
+        "collection-title": "офиц.текст",
+        "collection-number": "10",
+        "volume": "5",
+        "number-of-volumes": "10",
+        "edition": "2",
+        "publisher-place": "Санкт-Петербург",
+        "publisher": "СПбГУТ им. Бонч-Бруевича",
+        "issued": {
+            "date-parts": [[2006]]
+        },
+        "number-of-pages": "200",
+        "ISBN": "978-5-699-12014-7"
+    },
     {
         "id": "TEST",
         "type": "webpage",
@@ -140,7 +178,7 @@ print("SMOG")
 # For this reason, we first need to register all citations with the
 # CitationStylesBibliography.
 
-citation1 = Citation([CitationItem('TEST')])
+citation1 = Citation([CitationItem('BOOK')])
 # citation2 = Citation([CitationItem('ITEM-1'), CitationItem('ITEM-2')])
 # citation3 = Citation([CitationItem('ITEM-4')])
 # citation4 = Citation([CitationItem('ITEM-5')])

@@ -2,30 +2,60 @@
 {% block content %}
 
 
-<h1>Публикация: {{ publication }}</h1>
+<h1>{{ publication }}</h1>
 
 
 <h3>Автор:</h3>
 <ul>
   {% for author in publication.author.all %}
     <li>{{ author.name }}</li>
-  {% empty %}
-    <li>No authors</li>
   {% endfor %}
 </ul>
 
-<h2>Журнал:</h2>
-{% if publication.journal %}
-  <p>{{ publication.journal.name }}</p>
-{% else %}
-  <p>No journal</p>
+{% if publication.editor %}
+<h3>Редактор:</h3>
+<ul>
+  {% for editor in editor.author.all %}
+    <li>{{ editor.name }}</li>
+  {% endfor %}
+</ul>
 {% endif %}
 
-<h2>URL:</h2>
+
+{% if publication.journal %}
+<h3>Журнал:</h3>
+  <p>Название журнала: {{ publication.journal.name }}</p>
+  <p>ISSN: {{ publication.journal.ISSN }}</p>
+{% endif %}
+
+{% if publication.year %}
+<h3>Год:</h3>
+  <p>{{ publication.year }}</p>
+{% endif %}
+
+{% if publication.volume %}
+<h3>Том:</h3>
+  <p>{{ publication.volume }}</p>
+{% endif %}
+
+{% if publication.number %}
+<h3>Номер:</h3>
+  <p>{{ publication.number }}</p>
+{% endif %}
+
+{% if publication.page %}
+<h3>Страницы:</h3>
+  <p>{{ publication.page }}</p>
+{% endif %}
+
+{% if publication.month %}
+<h3>Месяц:</h3>
+  <p>{{ publication.month }}</p>
+{% endif %}
+
 {% if publication.URL %}
+  <h3>URL:</h3>
   <p><a href="{{ publication.URL }}">{{ publication.URL }}</a></p>
-{% else %}
-  <p>No URL</p>
 {% endif %}
 
 <table>

@@ -54,6 +54,7 @@ class Journal(models.Model):
 
 class Publication(models.Model):
     class PublicationType(models.TextChoices):
+        CHOOSE = "choose", "Выберите тип"
         ARTICLE = "article", "Article (Статья из журнала)"
         BOOK = "book", "Book (Книга)"
         BOOKLET = "booklet", "Booklet (Печатная работа, которая не содержит имя издателя)"
@@ -86,7 +87,7 @@ class Publication(models.Model):
     date_posted=models.DateTimeField(auto_now_add=True, help_text='Дата публикации на этом сайте')
     file_path = models.FileField(upload_to=user_directory_path, verbose_name='PDF', blank=True, null=True)
     keyword = TaggableManager(blank=True, help_text='Ключевые слова (записываются через запятую)')
-    publication_type = models.CharField(choices=PublicationType.choices, max_length=200, verbose_name='Тип', default=PublicationType.ARTICLE)
+    publication_type = models.CharField(choices=PublicationType.choices, max_length=200, verbose_name='Тип', default=PublicationType.CHOOSE)
     citation_key = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 

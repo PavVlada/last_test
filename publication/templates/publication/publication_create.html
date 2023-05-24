@@ -6,14 +6,112 @@
 <h3>Создание публикации</h3>
 <a href="{% url 'publications' %}">Вернуться назад</a>
 
-<form method="POST" action="" enctype="multipart/form-data">
+<!-- <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
     <input type="submit" value="Отправить">
+</form> -->
+
+<form method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h4>Сделать публикацию публичной</h4>
+    {{ form.public }}
+    <h4>Ключевые слова</h4>
+    {{ form.keyword }}
+    <h4>Идентификатор публикации</h4>
+    {{ form.citation_key }}
+    <h4>Выберите тип публикации</h4>
+    {{ form.publication_type }}
+
+    <div id="title" style="display: none;"><h4>Название</h4> {{ form.title }}</div>
+    <div id="author" style="display: none;"><h4>Автор</h4> {{ form.author }}</div>
+    <div id="editor" style="display: none;"><h4>Редактор</h4> {{ form.editor }}</div>
+    <div id="journal" style="display: none;"><h4>Журнал</h4> {{ form.journal }}</div>
+    <div id="publisher" style="display: none;"><h4>Publisher</h4> {{ form.publisher }}</div>
+
+    <div id="abstract" style="display: none;"><h4>Аннотация</h4> {{ form.abstract }}</div>
+    <div id="booktitle" style="display: none;"><h4>Наименование книги</h4> {{ form.booktitle }}</div>
+    <div id="chapter" style="display: none;"><h4>Глава</h4> {{ form.chapter }}</div>
+    <div id="edition" style="display: none;"><h4>Издание</h4> {{ form.edition }}</div>
+    <div id="ISBN" style="display: none;"><h4>ISBN</h4> {{ form.ISBN }}</div>
+    <div id="language" style="display: none;"><h4>Язык</h4> {{ form.language }}</div>
+    <div id="month" style="display: none;"><h4>Месяц</h4> {{ form.month }}</div>
+    <div id="note" style="display: none;"><h4>Заметка</h4> {{ form.note }}</div>
+    <div id="number" style="display: none;"><h4>Номер</h4> {{ form.number }}</div>
+    <div id="page" style="display: none;"><h4>Страница</h4> {{ form.page }}</div>
+    <div id="URL" style="display: none;"><h4>URL</h4> {{ form.URL }}</div>
+    <div id="volume" style="display: none;"><h4>Том</h4> {{ form.volume }}</div>
+    <div id="year" style="display: none;"><h4>Год</h4> {{ form.year }}</div>
+    <div id="DOI" style="display: none;"><h4>DOI</h4> {{ form.DOI }}</div>
+
+    <input type="submit" value="Отправить">
 </form>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_publication_type').change(function() {
+            var pubType = $(this).val();
+            if (pubType == 'article') {
+                $('#author').show();
+                $('#title').show();
+                $('#journal').show();
+                $('#year').show();
+                $('#volume').show();
+                $('#number').show();
+                $('#page').show();
+                $('#month').show();
+                $('#note').show();
+
+                $('#publisher').hide();
+                $('#abstract').hide();
+                $('#booktitle').hide();
+                $('#chapter').hide();
+                $('#edition').hide();
+                $('#ISBN').hide();
+                $('#language').hide();
+                $('#URL').hide();
+                $('#DOI').hide();
+
+
+            } else if (pubType == 'book') {
+                $('#author').show();
+                $('#title').show();
+                $('#journal').hide();
+                $('#year').show();
+                $('#volume').show();
+                $('#number').hide();
+                $('#page').hide();
+                $('#month').show();
+                $('#note').show();
+
+                $('#publisher').show();
+                $('#abstract').hide();
+                $('#booktitle').hide();
+                $('#chapter').hide();
+                $('#edition').show();
+                $('#ISBN').hide();
+                $('#language').hide();
+                $('#URL').hide();
+                $('#DOI').hide();
+            } else {
+                $('#title').hide();
+            }
+            
+        });
+        $(document).ready(function() {
+        $('#id_author', '#id_publisher', '#id_editor', '#id_journal').select2({
+            theme: 'bootstrap4',
+            tags: true,
+        });
+        
+    });
+        
+    });
+</script>
+
+<!-- <script type="text/javascript">
     $(document).ready(function() {
         $('#id_author', '#id_publisher', '#id_editor', '#id_journal').select2({
             theme: 'bootstrap4',
@@ -21,6 +119,6 @@
         });
         
     });
-</script>
+</script> -->
 
 {% endblock content %}

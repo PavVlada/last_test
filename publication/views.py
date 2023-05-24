@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from .models import Publication, Author, Editor, Publisher, Journal, Editor
 from .forms import PublicationForm
-from .bibtex_helpers import create_bibtex
+from .bibtex_helpers import create_bibtex, test, make_bibtex, make_style
 from django.conf import settings
 
 from .filters import PublicationFilter
@@ -92,7 +92,50 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         # context = self.get_context_data()
         # publisher = context['publisher']
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        data = form.cleaned_data.copy()
+        new_data = dict()
+        new_data['author'] = [str(author) for author in data['author']]
+
+        if data['editor']:
+            new_data['editor'] = [str(editor) for editor in data['editor']]
+
+    
+        if data['journal']:
+            new_data['journal'] = data['journal'].name
+            new_data['ISSN'] = data['journal'].ISSN
+
+        if data['publisher']:
+            new_data['publisher'] = data['publisher'].name
+            new_data['address'] = data['publisher'].address
+        
+        for value in [
+            'publication_type',
+            'title', 
+            'abstract', 
+            'booktitle', 
+            'chapter', 
+            'edition', 
+            'ISBN', 
+            'language', 
+            'month',
+            'note',
+            'number',
+            'page',
+            'URL',
+            'volume',
+            'year',
+            'DOI']:
+            if data[value]:
+                new_data[value] = data[value]
+
+        tmp = make_bibtex(new_data)
+        self.object.bibtex = tmp['bibtex']
+        self.object.citation_key = tmp['id']
+        # some_str = make_style(tmp['id'], tmp['bibtex'], 'gost-r-7-0-5-2008')
+        self.object.save()
+        # print(f"IN VIEW: {some_str}")
+        form.save_m2m()
         # if publisher.is_valid():
         #     publisher.instance = self.object
         #     publisher.save()

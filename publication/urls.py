@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.conf import settings
 from ajax_select import urls as ajax_select_urls
 from .views import PublicationList, PublicationDetail, PublicationCreate, PublicationUpdate, PublicationDelete, MyPublicationList, PublicationUpload
-from .views import AuthorAutocomplete, PublisherAutocomplete, EditorAutocomplete, JournalAutocomplete
+from .views import ContributorAutocomplete, PublisherAutocomplete, EventAutocomplete, JournalAutocomplete, PublicationAutocomplete
 
 # admin.autodiscover()
 
@@ -24,10 +24,11 @@ urlpatterns = [
     # path('author-delete/<int:pk>/', AuthorDelete.as_view(), name='author-delete'),
 
 
-    path('author-autocomplete/', AuthorAutocomplete.as_view(create_field='name'), name='author-autocomplete'),
-    path('editor-autocomplete/', EditorAutocomplete.as_view(create_field='name'), name='editor-autocomplete'),
+    path('contributor-autocomplete/', ContributorAutocomplete.as_view(create_field='name'), name='contributor-autocomplete'),
     path('publisher-autocomplete/', PublisherAutocomplete.as_view(create_field='name|address'), name='publisher-autocomplete'),
-    path('journal-autocomplete/', JournalAutocomplete.as_view(create_field='name'), name='journal-autocomplete'),
+    path('journal-autocomplete/', JournalAutocomplete.as_view(create_field='name|ISSN'), name='journal-autocomplete'),
+    path('event-autocomplete/', EventAutocomplete.as_view(create_field='name'), name='event-autocomplete'),
+    path('publication-autocomplete/', PublicationAutocomplete.as_view(), name='publication-autocomplete'),
 
     # url(r'^ajax_select/', include(ajax_select_urls)),
     # url(r'^admin/', include(admin.site.urls)),

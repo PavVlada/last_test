@@ -1,26 +1,12 @@
 from django import forms
-from .models import Publication, Author, Publisher, Journal, Editor
+from .models import Publication, Contributor, Event, Publisher, Journal
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.contrib.auth.models import User
 from dal import autocomplete
 
 from ajax_select.fields import AutoCompleteSelectMultipleField
-from ajax_select import make_ajax_field
 
-# class AuthorForm(forms.ModelForm):
-#     class Meta:
-#         model = Author
-#         fields = ['name']
-
-# class PublisherForm(forms.ModelForm):
-#     name = forms.ModelChoiceField(
-#         queryset=Publisher.objects.all(),
-#         widget=autocomplete.ModelSelect2(url='publisher-autocomplete')
-#     )
-#     class Meta:
-#         model = Publisher
-#         fields = ['name']
 
 class PublicationListForm(forms.ModelForm):
     class Meta:
@@ -33,30 +19,60 @@ class PublicationListForm(forms.ModelForm):
         ]
 
 class PublicationForm(forms.ModelForm):
-    author = forms.ModelMultipleChoiceField(
-        queryset=Author.objects.all(),
-        widget=autocomplete.ModelSelect2Multiple(url='author-autocomplete')
+    author = forms.ModelChoiceField(
+        queryset=Contributor.objects.all(),
+        # requiered=False,
+        widget=autocomplete.ModelSelect2(url='contributor-autocomplete')
+    )
+    coauthor = forms.ModelMultipleChoiceField(
+        queryset=Contributor.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2Multiple(url='contributor-autocomplete')
     )
     editor = forms.ModelMultipleChoiceField(
-        queryset=Editor.objects.all(),
+        queryset=Contributor.objects.all(),
         required=False,
-        widget=autocomplete.ModelSelect2Multiple(url='editor-autocomplete')
+        widget=autocomplete.ModelSelect2Multiple(url='contributor-autocomplete')
+    )
+    collectioneditor = forms.ModelMultipleChoiceField(
+        queryset=Contributor.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2Multiple(url='contributor-autocomplete')
+    )
+    reviewedauthor = forms.ModelMultipleChoiceField(
+        queryset=Contributor.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2Multiple(url='contributor-autocomplete')
+    )
+    translator = forms.ModelMultipleChoiceField(
+        queryset=Contributor.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2Multiple(url='contributor-autocomplete')
+    )
+
+    journal = forms.ModelChoiceField(
+        queryset=Journal.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2(url='journal-autocomplete')
+    )
+    event = forms.ModelChoiceField(
+        queryset=Event.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2(url='event-autocomplete')
+    )
+    book = forms.ModelChoiceField(
+        queryset=Publication.objects.all(),
+        required=False,
+        widget=autocomplete.ModelSelect2(url='publication-autocomplete')
     )
     publisher = forms.ModelChoiceField(
         queryset=Publisher.objects.all(),
         required=False,
         widget=autocomplete.ModelSelect2(url='publisher-autocomplete')
     )
-    journal = forms.ModelChoiceField(
-        queryset=Journal.objects.all(),
-        required=False,
-        widget=autocomplete.ModelSelect2(url='journal-autocomplete')
-    )
-    # author = AutoCompleteSelectMultipleField('author')
-    # editor = AutoCompleteSelectMultipleField('editor')
+
     class Meta:
         model = Publication
-        # author = make_ajax_field(Contributor,'author','person')
         fields = [
             # 'date_posted',
             'public',
@@ -66,27 +82,47 @@ class PublicationForm(forms.ModelForm):
             'citation_key',
 
             'author',
-            'abstract',
-            'annote',
-            'booktitle',
-            'chapter',
+            'coauthor',
             'editor',
-            'edition',
-            'howpublished',
-            'ISBN',
-            'journal',
-            'language',
-            'month',
-            'note',
-            'number',
-            'page',
-            'publisher',
-            'title',
-            'URL',
-            'volume',
-            'year',
+            'collectioneditor',
+            'reviewedauthor',
+            'translator',
 
+            'journal',
+            'event',
+            'book',
+            'publisher',
+
+            'abstract',
+            'archive',
+            'archive_location',
+            'call_number',
+            'collection_number',
+            'collection_title',
+            'container_title',
+            'edition',
+            'genre',
             'issue',
+
+            'day',
+            'year',
+            'month',
+
+            'language',
+            'medium',
+            'number_of_pages',
+            'number_of_volumes',
+            'page',
+            'section',
+            'source',
+            'title',
+            'title_short',
+            'version',
+            'volume',
+            
+            'ISBN',
+            'note',
+            'URL',
             'DOI',
             'bibtex'
     ]

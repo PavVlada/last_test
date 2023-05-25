@@ -16,26 +16,16 @@ class PublicationFilter(django_filters.FilterSet):
             'citation_key',
 
             'author',
-            'abstract',
-            'annote',
-            'booktitle',
-            'chapter',
-            'editor',
-            'edition',
-            'howpublished',
-            'ISBN',
-            'journal',
-            'language',
-            'month',
-            'note',
-            'number',
-            'page',
-            'publisher',
-            'title',
-            'URL',
-            'volume',
-            'year',
 
-            'issue',
+            'ISBN',
+            
+            'language',
+
+            'journal',
+            'publisher',
+            'event',
+
+            'title',
+            'year',
             'DOI',
         ]

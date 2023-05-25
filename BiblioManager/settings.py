@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'BiblioManager.wsgi.application'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'lastnew',  
+        'NAME': 'veryverylast',  
         'USER': 'admin',  
         'PASSWORD': '434971po',  
         'HOST': 'localhost',  

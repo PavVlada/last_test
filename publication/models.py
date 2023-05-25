@@ -13,61 +13,61 @@ def user_directory_path(instance, filename):
     return 'user_{0}/{1}'.format(instance.user.id, filename)
 
 
-class Author(models.Model):
-    name = models.CharField(max_length=200, blank=True)
+class Contributor(models.Model):
+    name = models.CharField(max_length=100, blank=True)
     def __str__(self):
         return str(self.name)
-    def create(self, text):
-        author = self.create(name=text)
-        return author
+    # def create(self, text):
+    #     author = self.create(name=text)
+    #     return author
 
-class Editor(models.Model):
-    name = models.CharField(max_length=200, blank=True)
+
+class Event(models.Model):
+    name = models.CharField(max_length=100, blank=True)
     def __str__(self):
         return str(self.name)
-    def create(self, text):
-        editor = self.create(name=text)
-        return editor
-
+    # def create(self, text):
+    #     event = self.create(name=text)
+    #     return event
 
 class Publisher(models.Model):
     name = models.CharField(max_length=256, blank=True)
     address = models.CharField(max_length=100, blank=True)
     def __str__(self):
         return f"{self.name}. Город: {self.address}"
-    def create(self, text):
-        name, address = text.split('|')
-        publisher = self.create(name=name.strip(), address=address.strip())
-        return publisher
+    # def create(self, text):
+    #     name, address = text.split('|')
+    #     publisher = self.create(name=name.strip(), address=address.strip())
+    #     return publisher
 
 
 class Journal(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    ISSN = models.CharField(max_length=8, blank=True,)
+    ISSN = models.CharField(max_length=15, blank=True,)
     def __str__(self):
         return f"{self.name}. ISSN: {self.ISSN}"
-    def create(self, text):
-        name, issn = text.split('|')
-        journal = self.create(name=name.strip(), ISSN=issn.strip())
-        return journal
+    # def create(self, text):
+    #     name, issn = text.split('|')
+    #     journal = self.create(name=name.strip(), ISSN=issn.strip())
+    #     return journal
 
 
 class Publication(models.Model):
     class PublicationType(models.TextChoices):
         CHOOSE = "choose", "Выберите тип"
-        ARTICLE = "article", "Article (Статья из журнала)"
-        BOOK = "book", "Book (Книга)"
-        BOOKLET = "booklet", "Booklet (Печатная работа, которая не содержит имя издателя)"
-        INBOOK = "inbook", "Inbook (Часть книги)"
-        INCOLLECTION = "incollection", "Incollection (Часть книги, имеющая собственное название)"
-        INPROCEEDINGS = "inproceedings", "Inproceedings (Труд конференции)"
-        MANUAL = "manual", "Manual (Техническая документация)"
-        MASTERSTHESIS = "mastersthesis", "Mastersthesis (Магистерская диссертация)"
-        MISC = "misc", "Misc (Если другие типы не подходят)"
-        PHDTHESIS = "phdthesis", "Phdthesis (Кандидатская диссертация)"
-        PROCEEDINGS = "proceedings", "Proceedings (Сборник трудов конференции)"
-        TECHREPORT = "techreport", "Techreport (Отчет)"
-        UNPUBLISHED = "unpublished", "Unpublished (Не опубликовано)"
+
+        WEBPAGE = "webpage", "Веб-страница (Электронный ресурс удаленного доступа)"
+        BOOK = "book", "Книга (Book)"
+        THESIS = "thesis", "Диссертация и автореферат диссертации (Thesis)"
+
+        CHAPTER = "chapter", "Раздел книги (BookSection)"
+        PAPER_CONFERENCE = "paper-conference", "Статья из сборника (Документ конференции) (Conference Paper)"
+        ARTICLE_NEWSPAPER = "article-newspaper", "Газетная статья (Newspaper Article)"
+        ENTRY_ENCYCLOPEDIA = "entry-encyclopedia", "Статья из энциклопедии (Encyclopedia Article)"
+        ARTICLE_JOURNAL = "article-journal", "Статья из периодики (Journal Article)"
+
+        SOFTWARE = "software", "Электронный ресурс локального доступа (Компьютерная программа) (Computer Program)"
+     
 
     class Month(models.IntegerChoices):
         JAN = 1, "Январь"
@@ -91,43 +91,55 @@ class Publication(models.Model):
     citation_key = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    author = models.ManyToManyField(Author, blank=False)
-    editor = models.ManyToManyField(Editor, blank=True)
-    # author = models.ManyToManyField(Contributor, through='PublicationContributor', blank=True)
+    author = models.ForeignKey(Contributor, on_delete=models.CASCADE, null=True, blank=True, related_name='author_publications')
+    coauthor = models.ManyToManyField(Contributor, blank=True, related_name='coauthor_publications')
+    editor = models.ManyToManyField(Contributor, blank=True, related_name='editor_publications')
+    collectioneditor = models.ManyToManyField(Contributor, blank=True, related_name='collectioneditor_publications')
+    reviewedauthor = models.ManyToManyField(Contributor, blank=True, related_name='reviewedauthor_publications')
+    translator = models.ManyToManyField(Contributor, blank=True, related_name='translator_publications')
+
+    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
+    book = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=True, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
 
     abstract = models.TextField(blank=True, null=True)
-    annote = models.TextField(blank=True, null=True, help_text='Аннотация для библиографической записи')
-    authority =  models.CharField(max_length=256, blank=True)
-    booktitle = models.CharField(max_length=256, blank=True, help_text='Наименование книги, содержащей данную работу')
-    chapter = models.CharField(max_length=50, blank=True, help_text='Номер главы')
-    edition = models.CharField(max_length=256, blank=True, help_text='Издание (полная строка, например, «1-е, стереотипное»)')
-    howpublished = models.CharField(max_length=256, blank=True)
-
-    ISBN = models.CharField(max_length=32, blank=True, help_text='Только для книг')
-    # journal = models.ManyToManyField(Journal, blank=True)
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
-    language = models.CharField(max_length=5, blank=True)
-    month = models.PositiveIntegerField(choices=Month.choices, blank=True, null=True)
-    note = models.CharField(max_length=256, blank=True, help_text='Любые заметки')
-    number = models.IntegerField(blank=True, null=True, help_text='Номер журнала')
-    # organization = models.CharField(max_length=256, blank=True)
-    page = models.CharField(max_length=50, blank=True)
-    # publisher = models.ManyToManyField(Publisher, blank=True)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=True, blank=True)
-    # series = models.CharField(max_length=256, blank=True)
-    title = models.CharField(max_length=256, blank=True)
-    URL = models.URLField(blank=True, help_text='Ссылка на оригинальную публикацию')
-    volume = models.IntegerField(blank=True, null=True, help_text='Том журнала или книги')
-    year = models.PositiveIntegerField(blank=True, null=True)
-   
+    archive = models.CharField(max_length=100, blank=True)
+    archive_location = models.CharField(max_length=100, blank=True)
+    call_number = models.CharField(max_length=100, blank=True)
+    collection_number = models.CharField(max_length=100, blank=True)
+    collection_title = models.CharField(max_length=100, blank=True)
+    container_title = models.CharField(max_length=100, blank=True)
+    edition = models.CharField(max_length=50, blank=True, help_text='Издание (полная строка, например, «1-е, стереотипное»)')
+    genre = models.CharField(max_length=100, blank=True)
     issue = models.PositiveIntegerField(blank=True, null=True)
-    issued = models.CharField(max_length=256, blank=True)
+
+    # ISSUED
+    day = models.PositiveIntegerField(blank=True, null=True)
+    year = models.PositiveIntegerField(blank=True, null=True)
+    month = models.PositiveIntegerField(choices=Month.choices, blank=True, null=True)
+
+    language = models.CharField(max_length=10, blank=True)
+    medium = models.CharField(max_length=100, blank=True)
+    number_of_pages = models.PositiveIntegerField(blank=True, null=True)
+    number_of_volumes = models.PositiveIntegerField(blank=True, null=True)
+    page = models.CharField(max_length=10, blank=True)
+    section = models.CharField(max_length=100, blank=True)
+    source = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    title_short = models.CharField(max_length=50, blank=True)
+    version = models.CharField(max_length=50, blank=True)
+    volume = models.IntegerField(blank=True, null=True, help_text='Том журнала или книги')
+
+    note = models.CharField(max_length=256, blank=True, help_text='Любые заметки')
+    ISBN = models.CharField(max_length=20, blank=True, help_text='Только для книг')
+    URL = models.URLField(blank=True, help_text='Ссылка на оригинальную публикацию')
     DOI = models.CharField(max_length=128, verbose_name='DOI', blank=True)
     bibtex= models.TextField(blank=True, null=True)
 
 
-    def get_fields(self):
-        return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
+    # def get_fields(self):
+    #     return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
 
     def __str__(self):
         return f'{self.title}'

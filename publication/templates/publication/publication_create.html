@@ -24,25 +24,119 @@
     <h4>Выберите тип публикации</h4>
     {{ form.publication_type }}
 
-    <div id="title" style="display: none;"><h4>Название</h4> {{ form.title }}</div>
     <div id="author" style="display: none;"><h4>Автор</h4> {{ form.author }}</div>
-    <div id="editor" style="display: none;"><h4>Редактор</h4> {{ form.editor }}</div>
-    <div id="journal" style="display: none;"><h4>Журнал</h4> {{ form.journal }}</div>
-    <div id="publisher" style="display: none;"><h4>Publisher</h4> {{ form.publisher }}</div>
+    <div id="coauthor" style="display: none;"><h4>Соавтор(ы)</h4> {{ form.coauthor }}</div>
+    <div id="editor" style="display: none;"><h4>Редактор(ы)</h4> {{ form.editor }}</div>
+    <div id="collectioneditor" style="display: none;"><h4>Редактор(ы) серии</h4><p>Составитель(-ли) [сост.]</p> {{ form.collectioneditor }}</div>
+    <div id="reviewedauthor" style="display: none;"><h4>Реценз. автор</h4> {{ form.reviewedauthor }}</div>
+    <div id="translator" style="display: none;"><h4>Переводчик(и)</h4> {{ form.translator }}</div>
 
-    <div id="abstract" style="display: none;"><h4>Аннотация</h4> {{ form.abstract }}</div>
-    <div id="booktitle" style="display: none;"><h4>Наименование книги</h4> {{ form.booktitle }}</div>
-    <div id="chapter" style="display: none;"><h4>Глава</h4> {{ form.chapter }}</div>
-    <div id="edition" style="display: none;"><h4>Издание</h4> {{ form.edition }}</div>
-    <div id="ISBN" style="display: none;"><h4>ISBN</h4> {{ form.ISBN }}</div>
+    <div id="journal" style="display: none;">
+        <h4>Журнал и ISSN</h4>
+        <p>При создании значение должно быть введено следующим образом: Название журнала | 0000-0000</p>
+        {{ form.journal }}
+    </div>
+    <div id="event" style="display: none;"><h4>Конференция</h4> {{ form.event }}</div>
+    <div id="book" style="display: none;"><h4>Книга</h4> {{ form.book }}</div>
+    <div id="publisher" style="display: none;">
+        <h4>Издатель и город издателя</h4>
+        <p>При создании значение должно быть введено следующим образом: Наименование издателя | Город </p>
+        {{ form.publisher }}
+        </div>
+    
+
+    <div id="title" style="display: none;"><h4>Название</h4> {{ form.title }}</div>
+
+    
+    <div id="abstract" style="display: none;"><h4>Выдержка (Аннотация)</h4> {{ form.abstract }}</div>
+    <div id="archive" style="display: none;"><h4>Архив</h4> {{ form.archive }}</div>
+    <div id="archive_location" style="display: none;"><h4>Место в архиве</h4> {{ form.archive_location }}</div>
+
+    <div id="call_number" style="display: none;"><h4>Шифр</h4> {{ form.call_number }}</div>
+    <div id="collection_number" style="display: none;"><h4>Номер серии</h4><p>Выпуск [Вып.]</p> {{ form.collection_number }}</div>
+
+    <div id="collection_title" style="display: none;">
+        <h4>Название серии</h4>
+        <p>Вид издания, отделяемый от заглавия надписью «[Электронный ресурс]» и двоеточием [метод. указания; учеб. пособие]</p>
+        <p>либо уточняющая часть, отделяемая от заглавия двоеточием: [Указ Президента РФ от 25.02.2000 № 433]</p>
+        {{ form.collection_title }}
+    </div>
+    <div id="container_title" style="display: none;">
+        <h4>Название трудов конференции/энциклопедии/газеты</h4>
+        {{ form.container_title }}
+    </div>
+
+    <div id="edition" style="display: none;">
+        <h4>Издание</h4>
+        <p>Сведения об издании: [2-е изд. перераб. и доп.]</p> 
+        {{ form.edition }}
+    </div>
+
+    <div id="genre" style="display: none;">
+        <h4>Издание</h4>
+        <p>Вид издания, отделяемый от заглавия надписью «[Электронный ресурс]» и двоеточием [науч. журн.; учеб. пособие; автореф. дис. … и др.]</p> 
+        {{ form.genre }}
+    </div>
+
+    <div id="issue" style="display: none;">
+        <h4>Выпуск</h4>
+        <p>Номер [№ 5]</p> 
+        {{ form.issue }}
+    </div>
+
+    <div id="day" style="display: none;"><h4>День издания</h4> {{ form.day }}</div>
+    <div id="month" style="display: none;"><h4>Месяц издания</h4> {{ form.month }}</div>
+    <div id="year" style="display: none;"><h4>Год издания</h4> {{ form.year }}</div>
+
     <div id="language" style="display: none;"><h4>Язык</h4> {{ form.language }}</div>
-    <div id="month" style="display: none;"><h4>Месяц</h4> {{ form.month }}</div>
-    <div id="note" style="display: none;"><h4>Заметка</h4> {{ form.note }}</div>
-    <div id="number" style="display: none;"><h4>Номер</h4> {{ form.number }}</div>
-    <div id="page" style="display: none;"><h4>Страница</h4> {{ form.page }}</div>
-    <div id="URL" style="display: none;"><h4>URL</h4> {{ form.URL }}</div>
+    <div id="medium" style="display: none;">
+        <h4>Система</h4>
+        <p>Тип носителя (Эл. опт. диск (CD-ROM) и др.)</p> 
+        {{ form.medium }}
+    </div>
+
+    <div id="number_of_pages" style="display: none;">
+        <h4>Число страниц</h4>
+         {{ form.number_of_pages }}
+    </div>
+
+    <div id="number_of_volumes" style="display: none;">
+        <h4>Кол-во томов</h4>
+         {{ form.number_of_volumes }}
+    </div>
+
+    <div id="page" style="display: none;">
+        <h4>Страницы</h4>
+        <p>Cтраницы [C. 25-32]</p>
+         {{ form.page }}
+    </div>
+
+    <div id="section" style="display: none;">
+        <h4>Раздел</h4>
+        <p>Уточняющая часть, отделяемая от заглавия двоеточием: [Федеральный закон РФ от 13.12.2000 № 60–ФЗ]</p>
+         {{ form.section }}
+    </div>
+
+    <div id="source" style="display: none;">
+        <h4>Библ. каталог</h4>
+         {{ form.source }}
+    </div>
+
+    <div id="title-short" style="display: none;">
+        <h4>Краткое назв.</h4>
+        <p>Название тома в многотомнике</p>
+         {{ form.title_short }}
+    </div>
+
+    <div id="version" style="display: none;">
+        <h4>Версия</h4>
+         {{ form.version }}
+    </div>
     <div id="volume" style="display: none;"><h4>Том</h4> {{ form.volume }}</div>
-    <div id="year" style="display: none;"><h4>Год</h4> {{ form.year }}</div>
+
+    <div id="ISBN" style="display: none;"><h4>ISBN</h4> {{ form.ISBN }}</div>
+    <div id="note" style="display: none;"><h4>Заметка</h4> {{ form.note }}</div>
+    <div id="URL" style="display: none;"><h4>URL</h4> {{ form.URL }}</div>
     <div id="DOI" style="display: none;"><h4>DOI</h4> {{ form.DOI }}</div>
 
     <input type="submit" value="Отправить">
@@ -53,47 +147,95 @@
     $(document).ready(function() {
         $('#id_publication_type').change(function() {
             var pubType = $(this).val();
-            if (pubType == 'article') {
+            if (pubType == 'article-journal') {
                 $('#author').show();
+                $('#coauthor').show();
+                $('#editor').show();
+                $('#collectioneditor').hide();
+                $('#reviewedauthor').show();
+                $('#translator').show();
+
                 $('#title').show();
+                
                 $('#journal').show();
-                $('#year').show();
-                $('#volume').show();
-                $('#number').show();
-                $('#page').show();
-                $('#month').show();
-                $('#note').show();
-
+                $('#event').hide();
+                $('#book').hide();
                 $('#publisher').hide();
-                $('#abstract').hide();
-                $('#booktitle').hide();
-                $('#chapter').hide();
+
+                $('#abstract').show();
+                $('#archive').hide();
+                $('#archive_location').hide();
+                $('#call_number').show();
+                $('#collection_number').hide();
+                $('#collection_title').show();
+                $('#container_title').hide();
                 $('#edition').hide();
+                $('#genre').hide();
+                $('#issue').show();
+
+                $('#day').hide();
+                $('#year').show();
+                $('#month').hide();
+
+                $('#language').show();
+                $('#medium').hide();
+                $('#number_of_pages').hide();
+                $('#number_of_volumes').hide();
+                $('#page').show();
+                $('#section').hide();
+                $('#source').show();
+                $('#title_short').show();
+                $('#version').hide();
+                $('#volume').show();
+
                 $('#ISBN').hide();
-                $('#language').hide();
-                $('#URL').hide();
-                $('#DOI').hide();
-
-
+                $('#note').show();
+                $('#URL').show();
+                $('#DOI').show();
             } else if (pubType == 'book') {
                 $('#author').show();
-                $('#title').show();
-                $('#journal').hide();
-                $('#year').show();
-                $('#volume').show();
-                $('#number').hide();
-                $('#page').hide();
-                $('#month').show();
-                $('#note').show();
+                $('#coauthor').show();
+                $('#editor').show();
+                $('#collectioneditor').show();
+                $('#reviewedauthor').hide();
+                $('#translator').show();
 
+                $('#title').show();
+                
+                $('#journal').hide();
+                $('#event').hide();
+                $('#book').hide();
                 $('#publisher').show();
-                $('#abstract').hide();
-                $('#booktitle').hide();
-                $('#chapter').hide();
+
+                $('#abstract').show();
+                $('#archive').show();
+                $('#archive_location').show();
+                $('#call_number').show();
+                $('#collection_number').show();
+                $('#collection_title').show();
+                $('#container_title').hide();
                 $('#edition').show();
-                $('#ISBN').hide();
-                $('#language').hide();
-                $('#URL').hide();
+                $('#genre').hide();
+                $('#issue').hide();
+
+                $('#day').hide();
+                $('#year').show();
+                $('#month').hide();
+
+                $('#language').show();
+                $('#medium').hide();
+                $('#number_of_pages').show();
+                $('#number_of_volumes').show();
+                $('#page').hide();
+                $('#section').hide();
+                $('#source').show();
+                $('#title_short').show();
+                $('#version').hide();
+                $('#volume').show();
+
+                $('#ISBN').show();
+                $('#note').show();
+                $('#URL').show();
                 $('#DOI').hide();
             } else {
                 $('#title').hide();
@@ -101,7 +243,7 @@
             
         });
         $(document).ready(function() {
-        $('#id_author', '#id_publisher', '#id_editor', '#id_journal').select2({
+        $('#id_author', '#id_coauthor','#id_editor', '#id_collectioneditor','#id_reviewedauthor', '#id_translator', '#id_publisher', '#id_journal', '#id_book', '#id_event').select2({
             theme: 'bootstrap4',
             tags: true,
         });

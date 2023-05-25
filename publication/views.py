@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 
-from .models import Publication, Author, Editor, Publisher, Journal, Editor
+from .models import Publication, Contributor, Event, Publisher, Journal
 from .forms import PublicationForm
 from .bibtex_helpers import create_bibtex, test, make_bibtex, make_style
 from django.conf import settings
@@ -90,55 +90,50 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        # context = self.get_context_data()
-        # publisher = context['publisher']
         self.object = form.save(commit=False)
-        data = form.cleaned_data.copy()
-        new_data = dict()
-        new_data['author'] = [str(author) for author in data['author']]
+        # data = form.cleaned_data.copy()
+        # new_data = dict()
+        # new_data['author'] = [str(author) for author in data['author']]
 
-        if data['editor']:
-            new_data['editor'] = [str(editor) for editor in data['editor']]
+        # if data['editor']:
+        #     new_data['editor'] = [str(editor) for editor in data['editor']]
 
     
-        if data['journal']:
-            new_data['journal'] = data['journal'].name
-            new_data['ISSN'] = data['journal'].ISSN
+        # if data['journal']:
+        #     new_data['journal'] = data['journal'].name
+        #     new_data['ISSN'] = data['journal'].ISSN
 
-        if data['publisher']:
-            new_data['publisher'] = data['publisher'].name
-            new_data['address'] = data['publisher'].address
+        # if data['publisher']:
+        #     new_data['publisher'] = data['publisher'].name
+        #     new_data['address'] = data['publisher'].address
         
-        for value in [
-            'publication_type',
-            'title', 
-            'abstract', 
-            'booktitle', 
-            'chapter', 
-            'edition', 
-            'ISBN', 
-            'language', 
-            'month',
-            'note',
-            'number',
-            'page',
-            'URL',
-            'volume',
-            'year',
-            'DOI']:
-            if data[value]:
-                new_data[value] = data[value]
+        # for value in [
+        #     'publication_type',
+        #     'title', 
+        #     'abstract', 
+        #     'booktitle', 
+        #     'chapter', 
+        #     'edition', 
+        #     'ISBN', 
+        #     'language', 
+        #     'month',
+        #     'note',
+        #     'number',
+        #     'page',
+        #     'URL',
+        #     'volume',
+        #     'year',
+        #     'DOI']:
+        #     if data[value]:
+        #         new_data[value] = data[value]
 
-        tmp = make_bibtex(new_data)
-        self.object.bibtex = tmp['bibtex']
-        self.object.citation_key = tmp['id']
-        # some_str = make_style(tmp['id'], tmp['bibtex'], 'gost-r-7-0-5-2008')
+        # tmp = make_bibtex(new_data)
+        # self.object.bibtex = tmp['bibtex']
+        # self.object.citation_key = tmp['id']
         self.object.save()
-        # print(f"IN VIEW: {some_str}")
+
         form.save_m2m()
-        # if publisher.is_valid():
-        #     publisher.instance = self.object
-        #     publisher.save()
+
         return super(PublicationCreate, self).form_valid(form)
     
     def view_form(request):
@@ -147,13 +142,7 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
             new_publication = form.save(commit=False)
             new_publication.save()
             form.save_m2m()
-    # def get_context_data(self, **kwargs: Any):
-    #     data = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         data['publisher'] = PublisherForm(self.request.POST)
-    #     else:
-    #         data['publisher'] = PublisherForm()
-    #     return data
+
             
 
 class PublicationUpload(LoginRequiredMixin, CreateView):
@@ -166,7 +155,7 @@ class PublicationUpload(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        # self.object = form.save()
+        self.object = form.save()
         # result = create_bibtex(str(self.object.file_path))
 
         # form.instance.bibtex = result['bibtex']
@@ -189,7 +178,7 @@ class PublicationUpload(LoginRequiredMixin, CreateView):
         # form.instance.url = metadata['url']
         # form.instance.doi = metadata['doi']
         # form.instance.authors = f"{metadata['author'][0]['family']} {metadata['author'][0]['given']}"
-        self.object = form.save()
+        # self.object = form.save()
 
         # print(f"result in form valid: {result}")
         return super(PublicationUpload, self).form_valid(form)
@@ -281,7 +270,7 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationForm
     context_object_name = 'publication'
-    template_name = 'publication/publication_update.html'
+    template_name = 'publication/publication_create.html'
     success_url = reverse_lazy('publications') # url name
 
 
@@ -291,9 +280,9 @@ class PublicationDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('publications') # url name
 
 
-class AuthorAutocomplete(autocomplete.Select2QuerySetView):
+class ContributorAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Author.objects.all()
+        qs = Contributor.objects.all()
 
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
@@ -301,7 +290,8 @@ class AuthorAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
     def create(self, text):
-        return Author.objects.create(name=text)
+        return Contributor.objects.create(name=text)
+
 
 class PublisherAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -325,44 +315,24 @@ class JournalAutocomplete(autocomplete.Select2QuerySetView):
         name, issn = text.split('|')
         return Journal.objects.create(name=name.strip(), ISSN=issn.strip())
 
-class EditorAutocomplete(autocomplete.Select2QuerySetView):
+
+class PublicationAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Editor.objects.all()
+        qs = Publication.objects.all()
 
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
+
+
+class EventAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Event.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+
     def create(self, text):
-        return Editor.objects.create(name=text)
-
-
-# class AuthorCreate(LoginRequiredMixin, CreateView):
-#     model = Author
-#     context_object_name = 'author'
-#     template_name = 'publication/author_create.html'
-#     success_url = reverse_lazy('publication-update')
-#     form_class = AuthorForm
-
-        
-#     def get_success_url(self):
-#         return reverse_lazy('publication-update', kwargs={'pk': self.object.pk})
-
-
-# class AuthorDelete(LoginRequiredMixin, DeleteView):
-#     model = Author
-#     context_object_name = 'author'
-#     success_url = reverse_lazy('publication-update') # url name
-
-        
-#     def get_success_url(self):
-#         return reverse_lazy('publication-update', kwargs={'pk': self.object.pk})
-
-
-# class AuthorUpdate(LoginRequiredMixin, UpdateView):
-#     model = Author
-#     form_class = AuthorForm
-#     context_object_name = 'author'
-#     template_name = 'publication/author_update.html'
-    
-#     def get_success_url(self):
-#         return reverse_lazy('publication-update', kwargs={'pk': self.object.pk})
+        return Event.objects.create(name=text)

@@ -20,6 +20,7 @@
     <h4>Ключевые слова</h4>
     {{ form.keyword }}
     <h4>Идентификатор публикации</h4>
+    <p>Поле обязательно</p>
     {{ form.citation_key }}
     <h4>Выберите тип публикации</h4>
     {{ form.publication_type }}
@@ -147,98 +148,99 @@
     $(document).ready(function() {
         $('#id_publication_type').change(function() {
             var pubType = $(this).val();
-            if (pubType == 'article-journal') {
-                $('#author').show();
-                $('#coauthor').show();
-                $('#editor').show();
-                $('#collectioneditor').hide();
-                $('#reviewedauthor').show();
-                $('#translator').show();
+            switch (pubType) {
+                case 'article-journal':
+                    $('#author').show();
+                    $('#coauthor').show();
+                    $('#editor').show();
+                    $('#collectioneditor').hide();
+                    $('#reviewedauthor').show();
+                    $('#translator').show();
 
-                $('#title').show();
-                
-                $('#journal').show();
-                $('#event').hide();
-                $('#book').hide();
-                $('#publisher').hide();
+                    $('#title').show();
+                    
+                    $('#journal').show();
+                    $('#event').hide();
+                    $('#book').hide();
+                    $('#publisher').hide();
 
-                $('#abstract').show();
-                $('#archive').hide();
-                $('#archive_location').hide();
-                $('#call_number').show();
-                $('#collection_number').hide();
-                $('#collection_title').show();
-                $('#container_title').hide();
-                $('#edition').hide();
-                $('#genre').hide();
-                $('#issue').show();
+                    $('#abstract').show();
+                    $('#archive').hide();
+                    $('#archive_location').hide();
+                    $('#call_number').show();
+                    $('#collection_number').hide();
+                    $('#collection_title').show();
+                    $('#container_title').hide();
+                    $('#edition').hide();
+                    $('#genre').hide();
+                    $('#issue').show();
 
-                $('#day').hide();
-                $('#year').show();
-                $('#month').hide();
+                    $('#day').hide();
+                    $('#year').show();
+                    $('#month').hide();
 
-                $('#language').show();
-                $('#medium').hide();
-                $('#number_of_pages').hide();
-                $('#number_of_volumes').hide();
-                $('#page').show();
-                $('#section').hide();
-                $('#source').show();
-                $('#title_short').show();
-                $('#version').hide();
-                $('#volume').show();
+                    $('#language').show();
+                    $('#medium').hide();
+                    $('#number_of_pages').hide();
+                    $('#number_of_volumes').hide();
+                    $('#page').show();
+                    $('#section').hide();
+                    $('#source').show();
+                    $('#title_short').show();
+                    $('#version').hide();
+                    $('#volume').show();
 
-                $('#ISBN').hide();
-                $('#note').show();
-                $('#URL').show();
-                $('#DOI').show();
-            } else if (pubType == 'book') {
-                $('#author').show();
-                $('#coauthor').show();
-                $('#editor').show();
-                $('#collectioneditor').show();
-                $('#reviewedauthor').hide();
-                $('#translator').show();
+                    $('#ISBN').hide();
+                    $('#note').show();
+                    $('#URL').show();
+                    $('#DOI').show();
+                    break;
+                case 'book':
+                    $('#author').show();
+                    $('#coauthor').show();
+                    $('#editor').show();
+                    $('#collectioneditor').show();
+                    $('#reviewedauthor').hide();
+                    $('#translator').show();
 
-                $('#title').show();
-                
-                $('#journal').hide();
-                $('#event').hide();
-                $('#book').hide();
-                $('#publisher').show();
+                    $('#title').show();
+                    
+                    $('#journal').hide();
+                    $('#event').hide();
+                    $('#book').hide();
+                    $('#publisher').show();
 
-                $('#abstract').show();
-                $('#archive').show();
-                $('#archive_location').show();
-                $('#call_number').show();
-                $('#collection_number').show();
-                $('#collection_title').show();
-                $('#container_title').hide();
-                $('#edition').show();
-                $('#genre').hide();
-                $('#issue').hide();
+                    $('#abstract').show();
+                    $('#archive').show();
+                    $('#archive_location').show();
+                    $('#call_number').show();
+                    $('#collection_number').show();
+                    $('#collection_title').show();
+                    $('#container_title').hide();
+                    $('#edition').show();
+                    $('#genre').hide();
+                    $('#issue').hide();
 
-                $('#day').hide();
-                $('#year').show();
-                $('#month').hide();
+                    $('#day').hide();
+                    $('#year').show();
+                    $('#month').hide();
 
-                $('#language').show();
-                $('#medium').hide();
-                $('#number_of_pages').show();
-                $('#number_of_volumes').show();
-                $('#page').hide();
-                $('#section').hide();
-                $('#source').show();
-                $('#title_short').show();
-                $('#version').hide();
-                $('#volume').show();
+                    $('#language').show();
+                    $('#medium').hide();
+                    $('#number_of_pages').show();
+                    $('#number_of_volumes').show();
+                    $('#page').hide();
+                    $('#section').hide();
+                    $('#source').show();
+                    $('#title_short').show();
+                    $('#version').hide();
+                    $('#volume').show();
 
-                $('#ISBN').show();
-                $('#note').show();
-                $('#URL').show();
-                $('#DOI').hide();
-            } else {
-                $('#title').hide();
+                    $('#ISBN').show();
+                    $('#note').show();
+                    $('#URL').show();
+                    $('#DOI').hide();
+                    break;
             }
             
         });

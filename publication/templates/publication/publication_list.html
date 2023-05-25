@@ -32,8 +32,8 @@
         <td>{{ publication.title }}</td>
         <td>
             <ul>
-            {% for tag in publication.tags.all %}
-                <li> {{ tag.name }} </li>
+            {% for keyword in publication.keyword.all %}
+                <li> {{ keyword.name }} </li>
             {% endfor %}
             </ul>
             </td>

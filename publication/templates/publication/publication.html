@@ -4,114 +4,239 @@
 
 <h1>{{ publication }}</h1>
 
-
-<h3>Автор:</h3>
+<h4>Ключевые слова:</h4>
 <ul>
-  {% for author in publication.author.all %}
-    <li>{{ author.name }}</li>
+  {% for keyword in publication.keyword.all %}
+    <li>{{ keyword.name }}</li>
   {% endfor %}
 </ul>
+<h4>Идентификатор для цитирования</h4>
+{{ publication.citation_key }}
+<h4>Тип публикации</h4>
+{{ publication.publication_type }}
+
+<h4>Автор</h4>
+{{ publication.author.name }}
+
+<h4>Название публикации</h4>
+{{ publication.title }}
+
+{% if publication.coauthor %}
+<h4>Соавтор(ы)</h4>
+<ul>
+  {% for coauthor in publication.coauthor.all %}
+    <li>{{ coauthor.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
 
 {% if publication.editor %}
-<h3>Редактор:</h3>
+<h4>Редактор(ы)</h4>
 <ul>
-  {% for editor in editor.author.all %}
+  {% for editor in publication.editor.all %}
     <li>{{ editor.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if publication.collectioneditor %}
+<h4>Редактор(ы) серии</h4>
+<ul>
+  {% for collectioneditor in publication.collectioneditor.all %}
+    <li>{{ collectioneditor.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if publication.reviewedauthor %}
+<h4>Реценз. автор</h4>
+<ul>
+  {% for reviewedauthor in publication.reviewedauthor.all %}
+    <li>{{ reviewedauthor.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if publication.translator %}
+<h4>Переводчик(и)</h4>
+<ul>
+  {% for translator in publication.translator.all %}
+    <li>{{ translator.name }}</li>
   {% endfor %}
 </ul>
 {% endif %}
 
 
 {% if publication.journal %}
-<h3>Журнал:</h3>
+<h4>Журнал:</h4>
   <p>Название журнала: {{ publication.journal.name }}</p>
   <p>ISSN: {{ publication.journal.ISSN }}</p>
 {% endif %}
 
+{% if publication.event %}
+<h4>Конференция</h4>
+{{ publication.event.name }}
+{% endif %}
+
+{% if publication.book %}
+<h4>Наименование книги</h4>
+{{ publication.book.title }}
+{% endif %}
+
+{% if publication.publisher %}
+<h4>Издатель</h4>
+<p>Наименование издателя: {{ publication.publisher.name }}</p>
+<p>Адрес: {{ publication.publisher.address }}</p>
+
+{% endif %}
+
+
+{% if publication.abstract %}
+<h4>Выдержка (Аннотация)</h4>
+{{ publication.abstract }}
+{% endif %}
+
+{% if publication.archive %}
+<h4>Архив</h4>
+{{ publication.archive }}
+{% endif %}
+
+{% if publication.archive_location %}
+<h4>Место в архиве</h4>
+{{ publication.archive_location }}
+{% endif %}
+
+
+{% if publication.call_number %}
+<h4>Шифр</h4>
+{{ publication.call_number }}
+{% endif %}
+
+{% if publication.collection_number %}
+<h4>Шифр</h4>
+{{ publication.collection_number }}
+{% endif %}
+
+{% if publication.collection_title %}
+<h4>Название серии</h4>
+{{ publication.collection_title }}
+{% endif %}
+
+{% if publication.container_title %}
+<h4>Название трудов конференции/энциклопедии/газеты</h4>
+{{ publication.container_title }}
+{% endif %}
+
+{% if publication.edition %}
+<h4>Номер издания</h4>
+{{ publication.edition }}
+{% endif %}
+
+{% if publication.genre %}
+<h4>Вид издания</h4>
+{{ publication.genre }}
+{% endif %}
+
+{% if publication.issue %}
+<h4>Выпуск</h4>
+{{ publication.issue }}
+{% endif %}
+
+<h4>Дата издания</h4>
+<p>{% if publication.day %}
+{{ publication.day }}
+.
+{% endif %}
+{% if publication.month %}
+{{ publication.month }}
+.
+{% endif %}
 {% if publication.year %}
-<h3>Год:</h3>
-  <p>{{ publication.year }}</p>
+{{ publication.year }}
+ г.
+{% endif %}
+</p>
+
+{% if publication.language %}
+<h4>Язык</h4>
+{{ publication.language }}
 {% endif %}
 
-{% if publication.volume %}
-<h3>Том:</h3>
-  <p>{{ publication.volume }}</p>
+{% if publication.medium %}
+<h4>Система</h4>
+{{ publication.medium }}
 {% endif %}
 
-{% if publication.number %}
-<h3>Номер:</h3>
-  <p>{{ publication.number }}</p>
+{% if publication.number_of_pages %}
+<h4>Число страниц</h4>
+{{ publication.number_of_pages }}
+{% endif %}
+
+{% if publication.number_of_volumes %}
+<h4>Кол-во томов</h4>
+{{ publication.number_of_volumes }}
 {% endif %}
 
 {% if publication.page %}
-<h3>Страницы:</h3>
-  <p>{{ publication.page }}</p>
+<h4>Страницы</h4>
+{{ publication.page }}
 {% endif %}
 
-{% if publication.month %}
-<h3>Месяц:</h3>
-  <p>{{ publication.month }}</p>
+{% if publication.section %}
+<h4>Раздел</h4>
+{{ publication.section }}
 {% endif %}
+
+{% if publication.source %}
+<h4>Библ. каталог</h4>
+{{ publication.source }}
+{% endif %}
+
+{% if publication.title_short %}
+<h4>Название тома в многотомнике</h4>
+{{ publication.title_short }}
+{% endif %}
+
+{% if publication.version %}
+<h4>Версия</h4>
+{{ publication.version }}
+{% endif %}
+
+{% if publication.volume %}
+<h4>Том</h4>
+{{ publication.volume }}
+{% endif %}
+
+{% if publication.ISBN %}
+<h4>ISBN</h4>
+{{ publication.ISBN }}
+{% endif %}
+
+{% if publication.note %}
+<h4>Заметка</h4>
+{{ publication.note }}
+{% endif %}
+
 
 {% if publication.URL %}
   <h3>URL:</h3>
   <p><a href="{{ publication.URL }}">{{ publication.URL }}</a></p>
 {% endif %}
 
-<table>
 
-    <tr>
-      <h1>Publication: {{ publication.title }}</h1>
+{% if publication.DOI %}
+<h4>DOI</h4>
+{{ publication.DOI }}
+{% endif %}
 
-  <h2>Authors:</h2>
-  <ul>
-    {% for author in publication.author.all %}
-      <li>{{ author.name }}</li>
-    {% empty %}
-      <li>No authors</li>
-    {% endfor %}
-  </ul>
+{% if publication.bibtex %}
+<h4>bibtex</h4>
+{{ publication.bibtex }}
+{% endif %}
 
-  <h2>Journal:</h2>
-  {% if publication.journal %}
-    <p>{{ publication.journal.name }}</p>
-  {% else %}
-    <p>No journal</p>
-  {% endif %}
-
-  <h2>URL:</h2>
-  {% if publication.URL %}
-    <p><a href="{{ publication.URL }}">{{ publication.URL }}</a></p>
-  {% else %}
-    <p>No URL</p>
-  {% endif %}
-        
-
-    {% for key, value in publication.get_fields %}
-
-    <tr>
-        <td>{{ key }}</td>
-        {% if key != "PDF" %}
-            <td>{{ value }}</td>
-        {% else %}
-            <td>
-            <a href="{{publication.media}}/media/{{ value }}">Ссылка на файл</a>
-            </td>
-        {% endif %}
-    </tr>
-    {% empty %}
-        <h3>Публикации не найдены</h3>
-    {% endfor %}
-    <tr>
-        <td> Теги </td>
-        <td>
-        <ul>
-        {% for tag in publication.tags.all %}
-            <li> {{ tag.name }} </li>
-        {% endfor %}
-        </ul>
-        </td>
-    <tr>
-</table>
+{% if publication.gost2018 %}
+<h4>ГОСТ Р 7.0.100–2018</h4>
+{{ publication.gost2018 }}
+{% endif %}
 
 {% endblock content %}

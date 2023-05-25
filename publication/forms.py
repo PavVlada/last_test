@@ -124,7 +124,8 @@ class PublicationForm(forms.ModelForm):
             'note',
             'URL',
             'DOI',
-            'bibtex'
+            'bibtex',
+            'gost2018'
     ]
 
 # class PublicationUploadForm(forms.ModelForm):

@@ -19,7 +19,7 @@
     {{ form.public }}
     <h4>Ключевые слова</h4>
     {{ form.keyword }}
-    <h4>Идентификатор публикации</h4>
+    <h4>Идентификатор для цитирования</h4>
     <p>Поле обязательно</p>
     {{ form.citation_key }}
     <h4>Выберите тип публикации</h4>
@@ -123,7 +123,7 @@
          {{ form.source }}
     </div>
 
-    <div id="title-short" style="display: none;">
+    <div id="title_short" style="display: none;">
         <h4>Краткое назв.</h4>
         <p>Название тома в многотомнике</p>
          {{ form.title_short }}

@@ -136,6 +136,7 @@ class Publication(models.Model):
     URL = models.URLField(blank=True, help_text='Ссылка на оригинальную публикацию')
     DOI = models.CharField(max_length=128, verbose_name='DOI', blank=True)
     bibtex= models.TextField(blank=True, null=True)
+    gost2018= models.TextField(blank=True, null=True)
 
 
     # def get_fields(self):

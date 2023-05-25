@@ -155,6 +155,7 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
                 new_data[value] = data[value]
         result_cite = test_cite(new_data)
         print(f"RESULT CITE:\n{result_cite}")
+        self.object.gost2018 = result_cite
 
         # tmp = make_bibtex(new_data)
         # self.object.bibtex = tmp['bibtex']

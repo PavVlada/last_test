@@ -413,7 +413,15 @@ class PublicationDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('publications') # url name
 
 
-class ContributorAutocomplete(autocomplete.Select2QuerySetView):
+class MySelect2QuerySetView(autocomplete.Select2QuerySetView):
+    def get_create_option(self, context, q):
+        if self.has_add_permission(self.request):
+            return super().get_create_option(context, q)
+
+    def has_add_permission(self, request):
+        return request.user.is_authenticated
+
+class ContributorAutocomplete(MySelect2QuerySetView):
     def get_queryset(self):
         qs = Contributor.objects.all()
 
@@ -426,7 +434,7 @@ class ContributorAutocomplete(autocomplete.Select2QuerySetView):
         return Contributor.objects.create(name=text)
 
 
-class PublisherAutocomplete(autocomplete.Select2QuerySetView):
+class PublisherAutocomplete(MySelect2QuerySetView):
     def get_queryset(self):
         qs = Publisher.objects.all()
 
@@ -437,7 +445,7 @@ class PublisherAutocomplete(autocomplete.Select2QuerySetView):
         name, address = text.split('|')
         return Publisher.objects.create(name=name.strip(), address=address.strip())
 
-class JournalAutocomplete(autocomplete.Select2QuerySetView):
+class JournalAutocomplete(MySelect2QuerySetView):
     def get_queryset(self):
         qs = Journal.objects.all()
 
@@ -449,7 +457,7 @@ class JournalAutocomplete(autocomplete.Select2QuerySetView):
         return Journal.objects.create(name=name.strip(), ISSN=issn.strip())
 
 
-class PublicationAutocomplete(autocomplete.Select2QuerySetView):
+class PublicationAutocomplete(MySelect2QuerySetView):
     def get_queryset(self):
         qs = Publication.objects.all()
 
@@ -458,7 +466,7 @@ class PublicationAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
-class EventAutocomplete(autocomplete.Select2QuerySetView):
+class EventAutocomplete(MySelect2QuerySetView):
     def get_queryset(self):
         qs = Event.objects.all()
 

@@ -232,11 +232,6 @@
 {{ publication.DOI }}
 {% endif %}
 
-{% if publication.bibtex %}
-<h4>bibtex</h4>
-{{ publication.bibtex }}
-{% endif %}
-
 {% if publication.gost2018 %}
 <h4>ГОСТ Р 7.0.100–2018</h4>
 {{ publication.gost2018 }}
@@ -245,6 +240,11 @@
 {% if publication.gost2008 %}
 <h4>ГОСТ Р 7.0.5-2008</h4>
 {{ publication.gost2008 }}
+{% endif %}
+
+{% if publication.bibtex %}
+<h4>bibtex</h4>
+{{ publication.bibtex }}
 {% endif %}
 
 

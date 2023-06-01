@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from transliterate import translit
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
@@ -153,12 +154,17 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
             'note']:
             if data[value]:
                 new_data[value] = data[value]
+        if not data['citation_key']:
+            citation_key = translit(new_data['author'].split(' ')[0] + "_" + new_data['title'].split(' ')[0], "ru", reversed=True)
+            self.object.citation_key = citation_key
+            new_data['citation_key'] = citation_key
         csl_data = make_csl(new_data)
         bibtex_result = make_bibtex(csl_data)
         self.object.bibtex = bibtex_result['bibtex']
-        result_cite = make_cite(csl_data)
-        print(f"RESULT CITE:\n{result_cite}")
-        self.object.gost2018 = result_cite
+        gost2018 = make_cite(csl_data, 'gost2018.csl')
+        gost2008 = make_cite(csl_data, 'gost-r-7-0-5-2008.csl')
+        self.object.gost2018 = gost2018
+        self.object.gost2008 = gost2008
 
         # tmp = make_bibtex(new_data)
         # self.object.bibtex = tmp['bibtex']
@@ -313,6 +319,7 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
         data = form.cleaned_data.copy()
         new_data = dict()
         new_data['author'] = str(data['author'])
+        
         for contributor_type in ['coauthor', 'editor', 'collectioneditor', 'reviewedauthor', 'translator']:
             if data[contributor_type]:
                 new_data[contributor_type] = [str(contributor) for contributor in data[contributor_type]]
@@ -370,12 +377,18 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
             'note']:
             if data[value]:
                 new_data[value] = data[value]
+        if not data['citation_key']:
+            citation_key = translit(new_data['author'].split(' ')[0] + "_" + new_data['title'].split(' ')[0], "ru", reversed=True)
+            self.object.citation_key = citation_key
+            new_data['citation_key'] = citation_key
+            
         csl_data = make_csl(new_data)
         bibtex_result = make_bibtex(csl_data)
         self.object.bibtex = bibtex_result['bibtex']
-        result_cite = make_cite(csl_data)
-        print(f"RESULT CITE:\n{result_cite}")
-        self.object.gost2018 = result_cite
+        gost2018 = make_cite(csl_data, 'gost2018.csl')
+        gost2008 = make_cite(csl_data, 'gost-r-7-0-5-2008.csl')
+        self.object.gost2018 = gost2018
+        self.object.gost2008 = gost2008
 
         # tmp = make_bibtex(new_data)
         # self.object.bibtex = tmp['bibtex']

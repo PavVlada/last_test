@@ -91,7 +91,7 @@ class Publication(models.Model):
     citation_key = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    author = models.ForeignKey(Contributor, on_delete=models.CASCADE, null=True, blank=True, related_name='author_publications', verbose_name='Автор')
+    author = models.ForeignKey(Contributor, on_delete=models.CASCADE, blank=True, related_name='author_publications', verbose_name='Автор')
     coauthor = models.ManyToManyField(Contributor, blank=True, related_name='coauthor_publications')
     editor = models.ManyToManyField(Contributor, blank=True, related_name='editor_publications')
     collectioneditor = models.ManyToManyField(Contributor, blank=True, related_name='collectioneditor_publications')
@@ -137,6 +137,7 @@ class Publication(models.Model):
     DOI = models.CharField(max_length=128, verbose_name='DOI', blank=True)
     bibtex= models.TextField(blank=True, null=True)
     gost2018= models.TextField(blank=True, null=True)
+    gost2008= models.TextField(blank=True, null=True)
 
 
     # def get_fields(self):

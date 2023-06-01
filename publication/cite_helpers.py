@@ -82,7 +82,7 @@ def make_csl(input_data):
     # return make_cite(data["id"], dict_to_json)
 
 # def make_cite(id, json_input):
-def make_cite(data):
+def make_cite(data, style):
     data_list = list()
     data_list.append(data)
     json_input = json.dumps(data_list, indent=4, ensure_ascii=False)
@@ -91,7 +91,7 @@ def make_cite(data):
     bib_source = CiteProcJSON(json_data)
 
     csl_dir = os.path.join(settings.BASE_DIR, 'csl')
-    csl_path = os.path.join(csl_dir, 'gost2018.csl')
+    csl_path = os.path.join(csl_dir, style)
     bib_style = CitationStylesStyle(csl_path, locale='ru', validate=False)
 
     bibliography = CitationStylesBibliography(bib_style, bib_source, formatter.html)

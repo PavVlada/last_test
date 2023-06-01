@@ -46,7 +46,7 @@ def make_bibtex(metadata):
         return dict()
     if 'pages' in data:
         data['pages'] = data['pages'].replace('-', '--')
-    if data['type'] == 'book':
+    if data['type'] == 'inbook':
         data['booktitle'] = metadata['container-title']
     elif data['type'] == 'article':
         data['journal'] = metadata['container-title']
@@ -59,23 +59,7 @@ def make_bibtex(metadata):
     for author in authors_tmp:
         authors.append(author["given"] + ' ' + author['family'])
 
-    try:
-        if authors and isinstance(authors,list):
-            lastname_firstauthor = (authors[0].strip()).split(' ')[1]
-        elif authors and isinstance(authors,str): 
-            lastname_firstauthor = (authors.strip()).split(' ')[1]
-    except:
-        lastname_firstauthor =''
-    year = data['year'] if 'year' in data.keys() else ''
-    try:
-        first_word_title =  data['title'].split(' ')[0] if 'title' in data.keys()  else ''
-    except:
-        first_word_title =''
-    id = lastname_firstauthor + str(year) + first_word_title
-    id = id.lower()
-    id = id.replace('-','')
-    if id == '':
-        id = 'NoValidID'
+    id = metadata['id']
 
     #Sanitize the URL
     if 'url' in data.keys():

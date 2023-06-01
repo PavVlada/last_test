@@ -7,3 +7,4 @@ markdown
 django-filter
 django-ajax-selects
 django-autocomplete-light
+transliterate

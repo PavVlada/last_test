@@ -8,8 +8,7 @@ from citeproc import formatter
 from citeproc.source.json import CiteProcJSON
 
 
-def test_cite(input_data):
-    data_list = list()
+def make_csl(input_data):
     data = dict()
     data["id"] = input_data["citation_key"]
     data["type"] = input_data["publication_type"]
@@ -63,7 +62,7 @@ def test_cite(input_data):
         if field == "journal":
             data["container-title"] = input_data["journal"]
             data["ISSN"] = input_data["ISSN"]
-            
+
         if field == "year":
             issue_list = list()
             issue_list_1 = list()
@@ -77,11 +76,17 @@ def test_cite(input_data):
             }
     print(f"DATA: {data}")
 
-    data_list.append(data)
-    dict_to_json = json.dumps(data_list, indent=4, ensure_ascii=False)
-    return make_cite(data["id"], dict_to_json)
+    # data_list.append(data)
+    return data
+    # dict_to_json = json.dumps(data_list, indent=4, ensure_ascii=False)
+    # return make_cite(data["id"], dict_to_json)
 
-def make_cite(id, json_input):
+# def make_cite(id, json_input):
+def make_cite(data):
+    data_list = list()
+    data_list.append(data)
+    json_input = json.dumps(data_list, indent=4, ensure_ascii=False)
+    id = data["id"]
     json_data = json.loads(json_input)
     bib_source = CiteProcJSON(json_data)
 
@@ -112,6 +117,7 @@ def make_cite(id, json_input):
 
     for item in bibliography.bibliography():
         result = str(item)
+    result = result[2:]
     result.replace('  ', ' ')
     return result.replace('..', '.')
 

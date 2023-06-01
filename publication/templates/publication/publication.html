@@ -2,7 +2,7 @@
 {% block content %}
 
 
-<h1>{{ publication }}</h1>
+<h3>{{ publication }}</h3>
 
 <h4>Ключевые слова:</h4>
 <ul>
@@ -10,8 +10,6 @@
     <li>{{ keyword.name }}</li>
   {% endfor %}
 </ul>
-<h4>Идентификатор для цитирования</h4>
-{{ publication.citation_key }}
 <h4>Тип публикации</h4>
 {{ publication.publication_type }}
 
@@ -21,7 +19,12 @@
 <h4>Название публикации</h4>
 {{ publication.title }}
 
-{% if publication.coauthor %}
+{% if publication.file_path %}
+<h4>Файл</h4>
+<a href="{{ publication.file_path.url }}">Открыть PDF</a>
+{% endif %}
+
+{% if publication.coauthor.exists %}
 <h4>Соавтор(ы)</h4>
 <ul>
   {% for coauthor in publication.coauthor.all %}
@@ -30,7 +33,7 @@
 </ul>
 {% endif %}
 
-{% if publication.editor %}
+{% if publication.editor.exists %}
 <h4>Редактор(ы)</h4>
 <ul>
   {% for editor in publication.editor.all %}
@@ -39,7 +42,7 @@
 </ul>
 {% endif %}
 
-{% if publication.collectioneditor %}
+{% if publication.collectioneditor.exists %}
 <h4>Редактор(ы) серии</h4>
 <ul>
   {% for collectioneditor in publication.collectioneditor.all %}
@@ -48,7 +51,7 @@
 </ul>
 {% endif %}
 
-{% if publication.reviewedauthor %}
+{% if publication.reviewedauthor.exists %}
 <h4>Реценз. автор</h4>
 <ul>
   {% for reviewedauthor in publication.reviewedauthor.all %}
@@ -57,7 +60,7 @@
 </ul>
 {% endif %}
 
-{% if publication.translator %}
+{% if publication.translator.exists %}
 <h4>Переводчик(и)</h4>
 <ul>
   {% for translator in publication.translator.all %}

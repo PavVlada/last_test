@@ -183,6 +183,7 @@
   <macro name="page">
     <label text-case="capitalize-first" prefix=" – " suffix=" " variable="page" form="short"/>
     <text variable="page"/>
+    <text variable="DOI" prefix=". – DOI " suffix="."/>
   </macro>
   <macro name="number-of-pages">
     <text variable="number-of-pages" prefix="– " suffix=" "/>

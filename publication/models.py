@@ -62,11 +62,11 @@ class Publication(models.Model):
 
         CHAPTER = "chapter", "Раздел книги (BookSection)"
         PAPER_CONFERENCE = "paper-conference", "Статья из сборника (Документ конференции) (Conference Paper)"
-        ARTICLE_NEWSPAPER = "article-newspaper", "Газетная статья (Newspaper Article)"
-        ENTRY_ENCYCLOPEDIA = "entry-encyclopedia", "Статья из энциклопедии (Encyclopedia Article)"
+        # ARTICLE_NEWSPAPER = "article-newspaper", "Газетная статья (Newspaper Article)"
+        # ENTRY_ENCYCLOPEDIA = "entry-encyclopedia", "Статья из энциклопедии (Encyclopedia Article)"
         ARTICLE_JOURNAL = "article-journal", "Статья из периодики (Journal Article)"
 
-        SOFTWARE = "software", "Электронный ресурс локального доступа (Компьютерная программа) (Computer Program)"
+        # SOFTWARE = "software", "Электронный ресурс локального доступа (Компьютерная программа) (Computer Program)"
      
 
     class Month(models.IntegerChoices):
@@ -86,22 +86,22 @@ class Publication(models.Model):
     public = models.BooleanField(default=True, help_text="Публикация доступна всем")
     date_posted=models.DateTimeField(auto_now_add=True, help_text='Дата публикации на этом сайте')
     file_path = models.FileField(upload_to=user_directory_path, verbose_name='PDF', blank=True, null=True)
-    keyword = TaggableManager(blank=True, help_text='Ключевые слова (записываются через запятую)')
+    keyword = TaggableManager(blank=True, help_text='Ключевые слова (записываются через запятую)', verbose_name='Ключевые словаf')
     publication_type = models.CharField(choices=PublicationType.choices, max_length=200, verbose_name='Тип', default=PublicationType.CHOOSE)
     citation_key = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    author = models.ForeignKey(Contributor, on_delete=models.CASCADE, null=True, blank=True, related_name='author_publications')
+    author = models.ForeignKey(Contributor, on_delete=models.CASCADE, null=True, blank=True, related_name='author_publications', verbose_name='Автор')
     coauthor = models.ManyToManyField(Contributor, blank=True, related_name='coauthor_publications')
     editor = models.ManyToManyField(Contributor, blank=True, related_name='editor_publications')
     collectioneditor = models.ManyToManyField(Contributor, blank=True, related_name='collectioneditor_publications')
     reviewedauthor = models.ManyToManyField(Contributor, blank=True, related_name='reviewedauthor_publications')
     translator = models.ManyToManyField(Contributor, blank=True, related_name='translator_publications')
 
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
+    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Журнал')
     book = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Конференция')
 
     abstract = models.TextField(blank=True, null=True)
     archive = models.CharField(max_length=100, blank=True)
@@ -126,7 +126,7 @@ class Publication(models.Model):
     page = models.CharField(max_length=10, blank=True)
     section = models.CharField(max_length=100, blank=True)
     source = models.CharField(max_length=100, blank=True)
-    title = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100, blank=True, verbose_name='Заглавие')
     title_short = models.CharField(max_length=50, blank=True)
     version = models.CharField(max_length=50, blank=True)
     volume = models.IntegerField(blank=True, null=True, help_text='Том журнала или книги')

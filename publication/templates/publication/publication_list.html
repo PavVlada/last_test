@@ -10,10 +10,54 @@
     <input type="submit" value="Поиск">
 </form> -->
 
-<form method="GET">
-    {{ list_filter.form }}
-    <input type="submit" value="Поиск">
+<form method="GET" style="display: grid; grid-template-columns: 1fr 2fr; column-gap: 10px; row-gap: 5px;">
+    <h6>Автор</h6>
+    <div>{{ list_filter.form.author }}</div>
+    <h6>Заглавие</h6>
+    <div>{{ list_filter.form.title }}</div>
+    <h6>Ключевые слова</h6>
+    <div>{{ list_filter.form.keyword__name }}</div>
+    <h6>Тип</h6>
+    <div>{{ list_filter.form.publication_type }}</div>
+
+    <h6>Журнал</h6>
+    <div>{{ list_filter.form.journal }}</div>
+    <h6>Издатель</h6>
+    <div>{{ list_filter.form.publisher }}</div>
+    <h6>Конференция</h6>
+    <div>{{ list_filter.form.event }}</div>
+    <h6>DOI</h6>
+    <div>{{ list_filter.form.DOI }}</div>
+    <h6>ISBN</h6>
+    <div>{{ list_filter.form.ISBN }}</div>
+
+    <!-- Добавьте остальные поля здесь -->
+
+    <div></div> <!-- Для поддержания структуры сетки -->
+    <input type="submit" value="Поиск" style="width: 80px; height: 30px;">
 </form>
+<!-- 
+<form method="GET">
+    <h6>Тип</h6>
+    {{ list_filter.form.publication_type }}
+    <h6>Автор</h6>
+    {{ list_filter.form.author }}
+    <h6>ISBN</h6>
+    {{ list_filter.form.ISBN}}
+    <h6>Журнал</h6>
+    {{ list_filter.form.journal }}
+    <h6>Издатель</h6>
+    {{ list_filter.form.publisher }}
+    <h6>Конференция</h6>
+    {{ list_filter.form.event }}
+    <h6>Заглавие</h6>
+    {{ list_filter.form.title }}
+    <h6>DOI</h6>
+    {{ list_filter.form.DOI }}
+    <h6>Ключевые слова</h6>
+    {{ list_filter.form.keyword__name }}
+    <input type="submit" value="Поиск">
+</form> -->
 
 {% if has_filter %}
   <a href="{%  url 'publications' %}">Очистить все фильтры</a>
@@ -22,7 +66,7 @@
 <table>
     <tr>
         <th>Публикация</th>
-        <th>Теги</th>
+        <th>Ключевые слова</th>
         <th></th>
         <th></th>
         <th></th>
@@ -37,10 +81,11 @@
             {% endfor %}
             </ul>
             </td>
+            <td><a href="{% url 'publication' publication.id %}">Подробнее</a></td>
 
         {% if request.user.is_authenticated %}
             {% if request.user.id == publication.user.id %}
-                <td><a href="{% url 'publication' publication.id %}">Подробнее</a></td>
+                
                 <td><a href="{% url 'publication-update' publication.id %}">Редактировать</a></td>
                 <td><a href="{% url 'publication-delete' publication.id %}">Удалить</a></td>
             {% endif %}

@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from .models import Publication, Contributor, Event, Publisher, Journal
 from .forms import PublicationForm
-from .bibtex_helpers import create_bibtex, test, make_bibtex, make_style
+from .bibtex_helpers import create_bibtex, test, make_bibtex
 from .cite_helpers import *
 from django.conf import settings
 
@@ -153,7 +153,10 @@ class PublicationCreate(LoginRequiredMixin, CreateView):
             'note']:
             if data[value]:
                 new_data[value] = data[value]
-        result_cite = test_cite(new_data)
+        csl_data = make_csl(new_data)
+        bibtex_result = make_bibtex(csl_data)
+        self.object.bibtex = bibtex_result['bibtex']
+        result_cite = make_cite(csl_data)
         print(f"RESULT CITE:\n{result_cite}")
         self.object.gost2018 = result_cite
 
@@ -302,6 +305,93 @@ class PublicationUpdate(LoginRequiredMixin, UpdateView):
     context_object_name = 'publication'
     template_name = 'publication/publication_create.html'
     success_url = reverse_lazy('publications') # url name
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        self.object = form.save(commit=False)
+
+        data = form.cleaned_data.copy()
+        new_data = dict()
+        new_data['author'] = str(data['author'])
+        for contributor_type in ['coauthor', 'editor', 'collectioneditor', 'reviewedauthor', 'translator']:
+            if data[contributor_type]:
+                new_data[contributor_type] = [str(contributor) for contributor in data[contributor_type]]
+        
+
+        if data['journal']:
+            new_data['journal'] = data['journal'].name
+            new_data['ISSN'] = data['journal'].ISSN
+
+        if data['publisher']:
+            new_data['publisher'] = data['publisher'].name
+            new_data['address'] = data['publisher'].address
+
+        if data['book']:
+            new_data['book'] = data['book'].title
+        
+        if data['event']:
+            new_data['event'] = data['event'].title
+
+        
+        for value in [
+            'publication_type',
+            'citation_key', 
+
+            'abstract', 
+            'archive', 
+            'archive_location', 
+            'call_number',
+            'collection_number',
+            'collection_title',
+            'container_title',
+            'edition', 
+            'genre',
+            'issue',
+            'day',
+            'year',
+            'month',
+
+            'language', 
+            'medium',
+            'number_of_pages',
+            'number_of_volumes',
+            'page',
+            'section',
+            'source',
+            'title',
+            'title_short',
+            'version',
+            'volume',
+            'note',
+
+            'URL',
+            'ISBN', 
+            'DOI',
+            'note']:
+            if data[value]:
+                new_data[value] = data[value]
+        csl_data = make_csl(new_data)
+        bibtex_result = make_bibtex(csl_data)
+        self.object.bibtex = bibtex_result['bibtex']
+        result_cite = make_cite(csl_data)
+        print(f"RESULT CITE:\n{result_cite}")
+        self.object.gost2018 = result_cite
+
+        # tmp = make_bibtex(new_data)
+        # self.object.bibtex = tmp['bibtex']
+        # self.object.citation_key = tmp['id']
+        self.object.save()
+
+        form.save_m2m()
+
+        return super(PublicationUpdate, self).form_valid(form)
+    
+    def view_form(request):
+        form = PublicationForm(request.POST)
+        if form.is_valid():
+            new_publication = form.save(commit=False)
+            new_publication.save()
+            form.save_m2m()
 
 
 class PublicationDelete(LoginRequiredMixin, DeleteView):

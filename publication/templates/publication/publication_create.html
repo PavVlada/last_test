@@ -20,8 +20,10 @@
     <h4>Ключевые слова</h4>
     {{ form.keyword }}
     <h4>Идентификатор для цитирования</h4>
-    <p>Поле обязательно</p>
+    <p>Если оставить пустым, то оно сгенерируется автоматически</p>
     {{ form.citation_key }}
+    <h4>Добавьте файл</h4>
+    {{ form.file_path }}
     <h4>Выберите тип публикации</h4>
     {{ form.publication_type }}
 
@@ -145,102 +147,255 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
+    function getDifference(sub_arr) {
+        let arr_all = [
+                '#author',
+                '#coauthor',
+                '#editor',
+                '#collectioneditor',
+                '#reviewedauthor',
+                '#translator',
+
+                '#title',
+                '#journal',
+                '#event',
+                '#book',
+                '#publisher',
+
+                '#abstract',
+                '#archive',
+                '#archive_location',
+                '#call_number',
+                '#collection_number',
+                '#collection_title',
+                '#container_title',
+                '#edition',
+                '#genre',
+                '#issue',
+
+                '#day',
+                '#year',
+                '#month',
+
+                '#language',
+                '#medium',
+                '#number_of_pages',
+                '#number_of_volumes',
+                '#page',
+                '#section',
+                '#source',
+                '#title_short',
+                '#version',
+                '#volume',
+
+                '#ISBN',
+                '#note',
+                '#URL',
+                '#DOI'
+            ]
+        return arr_all.filter(element=> {
+            return !sub_arr.includes(element);
+        })
+    }
+    function show_fields(arr_show) {
+        for (let el_show of arr_show) {
+            $(el_show).show();
+        }
+        for (let el_hide of getDifference(arr_show)) {
+            $(el_hide).hide();
+        }
+    }
+
     $(document).ready(function() {
         $('#id_publication_type').change(function() {
             var pubType = $(this).val();
+            let arr_show = []
             switch (pubType) {
                 case 'article-journal':
-                    $('#author').show();
-                    $('#coauthor').show();
-                    $('#editor').show();
-                    $('#collectioneditor').hide();
-                    $('#reviewedauthor').show();
-                    $('#translator').show();
-
-                    $('#title').show();
-                    
-                    $('#journal').show();
-                    $('#event').hide();
-                    $('#book').hide();
-                    $('#publisher').hide();
-
-                    $('#abstract').show();
-                    $('#archive').hide();
-                    $('#archive_location').hide();
-                    $('#call_number').show();
-                    $('#collection_number').hide();
-                    $('#collection_title').show();
-                    $('#container_title').hide();
-                    $('#edition').hide();
-                    $('#genre').hide();
-                    $('#issue').show();
-
-                    $('#day').hide();
-                    $('#year').show();
-                    $('#month').hide();
-
-                    $('#language').show();
-                    $('#medium').hide();
-                    $('#number_of_pages').hide();
-                    $('#number_of_volumes').hide();
-                    $('#page').show();
-                    $('#section').hide();
-                    $('#source').show();
-                    $('#title_short').show();
-                    $('#version').hide();
-                    $('#volume').show();
-
-                    $('#ISBN').hide();
-                    $('#note').show();
-                    $('#URL').show();
-                    $('#DOI').show();
+                    arr_show = ['#author', '#coauthor', '#editor', '#reviewedauthor', '#translator',
+                    '#title', '#journal', '#abstract', '#call_number', '#collection_title', '#issue', '#year',
+                    '#language', '#page', '#source', '#title_short', '#volume', '#note', '#URL', '#DOI'];
+                    show_fields(arr_show);
                     break;
                 case 'book':
-                    $('#author').show();
-                    $('#coauthor').show();
-                    $('#editor').show();
-                    $('#collectioneditor').show();
-                    $('#reviewedauthor').hide();
-                    $('#translator').show();
-
-                    $('#title').show();
-                    
-                    $('#journal').hide();
-                    $('#event').hide();
-                    $('#book').hide();
-                    $('#publisher').show();
-
-                    $('#abstract').show();
-                    $('#archive').show();
-                    $('#archive_location').show();
-                    $('#call_number').show();
-                    $('#collection_number').show();
-                    $('#collection_title').show();
-                    $('#container_title').hide();
-                    $('#edition').show();
-                    $('#genre').hide();
-                    $('#issue').hide();
-
-                    $('#day').hide();
-                    $('#year').show();
-                    $('#month').hide();
-
-                    $('#language').show();
-                    $('#medium').hide();
-                    $('#number_of_pages').show();
-                    $('#number_of_volumes').show();
-                    $('#page').hide();
-                    $('#section').hide();
-                    $('#source').show();
-                    $('#title_short').show();
-                    $('#version').hide();
-                    $('#volume').show();
-
-                    $('#ISBN').show();
-                    $('#note').show();
-                    $('#URL').show();
-                    $('#DOI').hide();
+                    arr_show = [
+                    '#author', '#coauthor', '#editor', '#collectioneditor', '#translator', '#title', '#publisher', 
+                    '#ISBN',
+                    '#URL',
+                    '#abstract',
+                    '#archive',
+                    '#archive_location',
+                    '#call_number',
+                    '#collection_number',
+                    '#collection_title',
+                    '#edition',
+                    '#language',
+                    '#note',
+                    '#number_of_pages',
+                    '#number_of_volumes',
+                    '#source',
+                    '#title_short',
+                    '#volume',
+                    '#year',
+                    ]
+                    show_fields(arr_show);
                     break;
+                case 'chapter':
+                    arr_show = [
+                    // '#DOI',
+                    '#ISBN',
+                    '#URL',
+                    '#abstract',
+                    '#archive',
+                    '#archive_location',
+                    '#author',
+                    '#book',
+                    '#call_number',
+                    '#coauthor',
+                    '#collection_number',
+                    '#collection_title',
+                    '#collectioneditor',
+                    // '#container_title',
+                    '#edition',
+                    '#editor',
+                    '#language',
+                    '#note',
+                    '#number_of_volumes',
+                    '#page',
+                    '#publisher',
+                    '#source',
+                    '#title',
+                    '#title_short',
+                    '#translator',
+                    '#volume',
+                    '#year',
+                    ];
+                    show_fields(arr_show);
+                    break;
+                case 'thesis':
+                    arr_show = [
+                        '#URL',
+                        '#abstract',
+                        '#archive',
+                        '#archive_location',
+                        '#author',
+                        '#call_number',
+                        '#coauthor',
+                        '#genre',
+                        '#language',
+                        '#note',
+                        '#number_of_pages',
+                        '#publisher',
+                        '#source',
+                        '#title',
+                        '#title_short',
+                        '#year',
+                    ];
+                    show_fields(arr_show);
+                    break;
+                case 'paper-conference':
+                    arr_show = [
+                        '#DOI',
+                        '#ISBN',
+                        '#URL',
+                        '#abstract',
+                        '#archive',
+                        '#archive_location',
+                        '#author',
+                        '#call_number',
+                        '#coauthor',
+                        '#collection_title',
+                        '#collectioneditor',
+                        '#editor',
+                        '#event',
+                        '#language',
+                        '#note',
+                        '#page',
+                        '#publisher',
+                        '#source',
+                        '#title',
+                        '#title_short',
+                        '#translator',
+                        '#volume',
+                        '#year',
+                    ];
+                    show_fields(arr_show);
+                    break;
+                case 'webpage':
+                    arr_show = [
+            
+                        '#URL',
+                        '#abstract',
+                  
+                        '#author',
+                       
+                        '#coauthor',
+                     
+                        '#collection_title',
+                        '#collectioneditor',
+                        '#container_title',
+                        '#day',
+                        '#genre',
+                        '#language',
+                        '#month',
+                        '#note',
+                        '#title',
+                        '#title_short',
+                        '#translator',
+                        '#year',
+                    ];
+                    show_fields(arr_show);
+                    break;
+                default:
+                    let arr_all = [
+                        '#author',
+                        '#coauthor',
+                        '#editor',
+                        '#collectioneditor',
+                        '#reviewedauthor',
+                        '#translator',
+
+                        '#title',
+                        '#journal',
+                        '#event',
+                        '#book',
+                        '#publisher',
+
+                        '#abstract',
+                        '#archive',
+                        '#archive_location',
+                        '#call_number',
+                        '#collection_number',
+                        '#collection_title',
+                        '#container_title',
+                        '#edition',
+                        '#genre',
+                        '#issue',
+
+                        '#day',
+                        '#year',
+                        '#month',
+
+                        '#language',
+                        '#medium',
+                        '#number_of_pages',
+                        '#number_of_volumes',
+                        '#page',
+                        '#section',
+                        '#source',
+                        '#title_short',
+                        '#version',
+                        '#volume',
+
+                        '#ISBN',
+                        '#note',
+                        '#URL',
+                        '#DOI'
+                    ];
+                    for (let el_show of arr_all) {
+                        $(el_show).show();
+                    }
+
             }
             
         });

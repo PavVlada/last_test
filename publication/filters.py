@@ -13,19 +13,14 @@ class PublicationFilter(django_filters.FilterSet):
         fields = [
             # 'keyword',
             'publication_type',
-            'citation_key',
-
             'author',
-
             'ISBN',
-            
-            'language',
 
             'journal',
             'publisher',
             'event',
 
             'title',
-            'year',
+            # 'year',
             'DOI',
         ]
